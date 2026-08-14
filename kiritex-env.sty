@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{kiritex-env}[2026/07/30 v1.1.0 KiriTeX problem environments]
+\ProvidesPackage{kiritex-env}[2026/08/14 v1.0.2 KiriTeX problem environments]
 \RequirePackage{xparse}
 
 % ---- safety fallbacks for class conditionals ----
@@ -16,19 +16,11 @@
 % problem text; KiriTeX owns all visible numbering through counters below.
 % Subparts use (1), (2), ... at the left edge; do not hand-write subpart labels.
 
-% ---- problem label helpers ----
-\newcommand{\kt@problem@tag}[1]{%
-  \begingroup
-  \setlength{\fboxsep}{1.5pt}%
-  \textcolor{kiriteal}{\footnotesize\sffamily\bfseries #1}%
-  \endgroup
-}
-
-\NewDocumentCommand{\kt@problem@head}{m}{%
+% ---- problem label helper ----
+\NewDocumentCommand{\kt@problem@head}{}{%
   \refstepcounter{problem}%
   \par\medskip\noindent
   \textbf{题 \theproblem}%
-  \if\relax\detokenize{#1}\relax\else\quad\kt@problem@tag{#1}\fi
   \quad
 }
 
@@ -73,10 +65,9 @@
 
 % ============================================================
 % 1. Standard problem
-%    Optional tag: \begin{problem}[基础] ... \end{problem}
 % ============================================================
-\NewDocumentEnvironment{problem}{o}{%
-  \IfNoValueTF{#1}{\kt@problem@head{}}{\kt@problem@head{#1}}%
+\NewDocumentEnvironment{problem}{}{%
+  \kt@problem@head
 }{%
   \par\medskip
   \if@kiritex@pad\clearpage\fi
@@ -84,12 +75,11 @@
 
 % ============================================================
 % 2. True/False problem
-%    Optional tag: \begin{problemtf}[判断] ... \end{problemtf}
 %    Renders only the generated problem label and the statement text.
 %    No trailing parentheses, blanks, or rules are added.
 % ============================================================
-\NewDocumentEnvironment{problemtf}{o}{%
-  \IfNoValueTF{#1}{\kt@problem@head{}}{\kt@problem@head{#1}}%
+\NewDocumentEnvironment{problemtf}{}{%
+  \kt@problem@head
 }{%
   \par\medskip
   \if@kiritex@pad\clearpage\fi
@@ -97,7 +87,6 @@
 
 % ============================================================
 % 3. Multiple choice problem
-%    Optional tag: \begin{problemchoice}[选择] ... \end{problemchoice}
 %    Prompt text must not end with closing punctuation.
 %    Options auto-labeled A, B, C, D.
 %    Layout auto-detects 1, 2, or 4 options per row based on option widths.
@@ -123,8 +112,8 @@
   \ifcase\value{kt@choice@num}\or A\or B\or C\or D\or E\or F\or G\or H\fi
 }
 
-\NewDocumentEnvironment{problemchoice}{o}{%
-  \IfNoValueTF{#1}{\kt@problem@head{}}{\kt@problem@head{#1}}%
+\NewDocumentEnvironment{problemchoice}{}{%
+  \kt@problem@head
   \setcounter{kt@choice@num}{0}%
   \global\kt@choice@maxw=0pt\relax
   \let\kt@choice@a\@empty

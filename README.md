@@ -6,7 +6,7 @@ KiriTeX 是一个基于 XeLaTeX + ctex 的中文题本模板，适合数学、�
 - `\documentclass[pad]{kiritex}`：Pad 横版，默认一页一题，适合平板阅读和批注。
 - `\documentclass[answers]{kiritex}`：教师版，显示 `\answer{...}` 写入的答案。
 
-当前版本：`1.1.0`。
+当前版本：`1.0.2`。
 
 ## 快速开始
 
@@ -24,12 +24,12 @@ KiriTeX 是一个基于 XeLaTeX + ctex 的中文题本模板，适合数学、�
 \section{极限与连续}
 \subsection{极限的计算}
 
-\begin{problem}[基础]
+\begin{problem}
   求极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$。
   \answer{极限值为 $1$。}
 \end{problem}
 
-\begin{problemchoice}[选择]
+\begin{problemchoice}
   极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$ 的值是
   \choice{0}
   \choice{1}
@@ -74,23 +74,32 @@ KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写
 
 这个规则同样适用于标题、题干、页眉、目录文本和封面元信息：除非序号本身是题目内容的一部分，否则不要手动加入序号。
 
+## 公式写作
+
+数学公式遵循 `docs/superpowers/specs/2026-08-14-kiritex-math-style.md` 的约定，要点如下：
+
+- 行间公式用 `\[ ... \]`（默认不编号），行内用 `$ ... $`，多行对齐用 `align*`，需要编号时用 `equation`。
+- 变量用斜体，函数名、常数、单位、化学式、微分算子用正体：`\sin x`、`\mathrm{e}`、`\mathrm{i}`、`\mathrm{d}x`、`\mathrm{Pa}`、`\mathrm{O_2}`。
+- 多字母下标用正体：`P_{\mathrm{ext}}`。
+- 向量用 `\vec{v}`，矩阵/张量用 `\bm{A}`。
+- 积分写 `\int_a^b f(x)\,\mathrm{d}x`。
+
 ## 题型
 
 ### 简答题 / 计算题
 
 ```latex
-\begin{problem}[基础]
+\begin{problem}
   求函数 $f(x)=x^2\sin x$ 的导数。
   \answer{$f'(x)=2x\sin x+x^2\cos x$。}
 \end{problem}
-```
 
-`problem` 环境会自动输出统一题号，格式如「题 1.1」。可选参数 `[基础]`、`[综合]`、`[证明]` 等会显示为题目标记；标记不是编号，不参与计数。
+`problem` 环境会自动输出统一题号，格式如「题 1.1」。
 
 大题下的小题使用 `problemsubparts`，只写 `\item`，不要手写小题编号。小题编号自动显示为英文括号形式 `(1)`、`(2)`，并从左侧正常顶齐。
 
 ```latex
-\begin{problem}[综合]
+\begin{problem}
   计算下列极限：
   \begin{problemsubparts}
     \item $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$
@@ -112,7 +121,7 @@ KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写
 ### 判断题
 
 ```latex
-\begin{problemtf}[判断]
+\begin{problemtf}
   若函数在一点可导，则它在该点连续。
   \answer{正确。}
 \end{problemtf}
@@ -123,7 +132,7 @@ KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写
 ### 选择题
 
 ```latex
-\begin{problemchoice}[选择]
+\begin{problemchoice}
   以下哪个函数在 $x=0$ 处连续
   \choice{$f(x)=x$}
   \choice{$f(x)=1/x$}
@@ -177,6 +186,7 @@ A4 竖版适合连续阅读和打印，题目自然流动排版。Pad 横版适�
 | `demo-a4.tex` | A4 竖版教师版示例 |
 | `demo-pad.tex` | Pad 横版学生版示例 |
 | `docs/superpowers/specs/2026-05-18-kiritex-design.md` | 稳定设计规范，供后续 agent 阅读 |
+| `docs/superpowers/specs/2026-08-14-kiritex-math-style.md` | 数学公式写作规范 |
 | `docs/superpowers/plans/2026-05-18-kiritex.md` | 按模块组织的维护计划 |
 | `CHANGELOG.md` | 版本历史 |
 

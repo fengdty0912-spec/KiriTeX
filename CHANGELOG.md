@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 - 2026-08-14
+
+- Removed the semantic-tag feature introduced in 1.1.0: `problem`, `problemtf`, and `problemchoice` no longer accept an optional `[标签]` argument, and no tag is rendered after the problem label. The `answers` option from 1.1.0 is retained.
+- Updated demos, README, design spec, AGENTS.md, and the maintenance plan to drop tag syntax and wording.
+- Added the `bm` package so authors can write matrices and tensors with `\bm{...}`.
+- Added `docs/superpowers/specs/2026-08-14-kiritex-math-style.md`, a standalone math formula writing guide distilled from the linear-algebra and thermodynamics notes; linked from README, the design spec, AGENTS.md, and the maintenance plan.
+
 ## 1.1.0 - 2026-07-30
 
 - Preserved the previous release at Git tag `v1.0.1`; this version is a compatible 1.x enhancement.

@@ -65,6 +65,7 @@ Without `answers`, `\answer{...}` content is hidden. With `answers`, answers are
 - Paragraph indentation is disabled; paragraph spacing is light and consistent.
 - Section headings use navy and a rule below the title.
 - Subsection headings use a quieter navy tone.
+- Math formula writing follows `docs/superpowers/specs/2026-08-14-kiritex-math-style.md`.
 
 ## Problem Environments
 
@@ -76,15 +77,13 @@ For calculation, proof, and short-answer prompts.
 
 Expected output prefix: `题 <section>.<number>`.
 
-All problem-like environments accept an optional semantic tag:
-
 ```latex
-\begin{problem}[基础]
+\begin{problem}
   ...
 \end{problem}
 ```
 
-Tags such as `基础`, `综合`, `证明`, `判断`, or `选择` are descriptive metadata. They must not be used for manual numbering.
+Problem-like environments take no optional argument. The 1.1.0 semantic-tag feature (`\begin{problem}[基础]`) was removed in 1.0.2.
 
 ### `problemsubparts`
 
@@ -156,6 +155,7 @@ Do not add manual sequence numbers to cover metadata unless the sequence is part
 | `kiritex-env.sty` | Problem counters, problem-like environments, subparts, fill-in blanks, choice storage/rendering |
 | `kiritex-pagestyle.sty` | Geometry, headers, footers, cover, links, section styling, `\KiriTeX` logo |
 | `README.md` | User-facing guide and maintenance log |
+| `docs/superpowers/specs/2026-08-14-kiritex-math-style.md` | Math formula writing conventions |
 | `docs/superpowers/plans/2026-05-18-kiritex.md` | Module-based maintenance plan |
 
 ## Verification

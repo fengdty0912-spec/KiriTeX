@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{kiritex}[2026/07/30 v1.1.0 KiriTeX problem workbook template]
+\ProvidesClass{kiritex}[2026/08/14 v1.0.2 KiriTeX problem workbook template]
 
 % ---- class option toggles ----
 \newif\if@kiritex@pad
@@ -23,6 +23,7 @@
 \RequirePackage{fancyhdr}
 \RequirePackage{titlesec}
 \RequirePackage{amsmath,amssymb}
+\RequirePackage{bm}
 \RequirePackage{hyperref}
 \RequirePackage{graphicx}
 \RequirePackage{xparse}
@@ -45,7 +46,7 @@
 % ---- additional settings ----
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.5\baselineskip}
-\newcommand{\kiritexversion}{1.1.0}
+\newcommand{\kiritexversion}{1.0.2}
 
 \AtBeginDocument{%
   \if@kiritex@pad\zihao{-4}\fi
