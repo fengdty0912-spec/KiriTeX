@@ -1,0 +1,146 @@
+\documentclass[pad]{kiritex}
+
+\title{高等数学习题集}
+\author{风待桐叶}
+\date{2026年5月}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{极限与连续}
+
+\subsection{极限的计算}
+
+\begin{problem}
+  求极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$。
+\end{problem}
+
+\begin{problem}
+  求极限 $\displaystyle\lim_{x\to\infty}\left(1+\frac{1}{x}\right)^x$。
+\end{problem}
+
+\begin{problem}
+  求极限 $\displaystyle\lim_{x\to 0}\frac{\tan x - \sin x}{x^3}$。
+\end{problem}
+
+\subsection{重要极限}
+
+\begin{problem}
+  求极限 $\displaystyle\lim_{x\to 0}\frac{1-\cos x}{x^2}$。
+\end{problem}
+
+\begin{problem}
+  求极限 $\displaystyle\lim_{x\to 0}(1+2x)^{\frac{1}{x}}$。
+\end{problem}
+
+\subsection{连续性}
+
+\begin{problemtf}
+  判断函数 $f(x)=\dfrac{|x|}{x}$ 在 $x=0$ 处是否连续。
+\end{problemtf}
+
+\begin{problem}
+  设 $f(x)=\begin{cases}
+    x^2\sin\frac{1}{x}, & x\neq 0\\
+    0, & x=0
+  \end{cases}$，讨论 $f(x)$ 在 $x=0$ 处的连续性与可导性。
+\end{problem}
+
+\begin{problemchoice}
+  极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$ 的值是多少
+  \choice{0}
+  \choice{1}
+  \choice{$\infty$}
+  \choice{不存在}
+\end{problemchoice}
+
+\section{导数与微分}
+
+\subsection{基本求导法则}
+
+\begin{problem}
+  求 $y=x^3-3x^2+2x-1$ 的导数。
+\end{problem}
+
+\begin{problem}
+  求 $y=\ln(\sin x)$ 的导数。
+\end{problem}
+
+\subsection{高阶导数}
+
+\begin{problem}
+  设 $y=\mathrm{e}^{x}\cos x$，求 $y''$。
+\end{problem}
+
+\begin{problem}
+  设 $y=\dfrac{1}{1-x}$，求 $y^{(n)}$。
+\end{problem}
+
+\subsection{导数的应用}
+
+\begin{problem}
+  求曲线 $y=x^3-3x$ 的拐点与凹凸区间。
+\end{problem}
+
+\begin{problem}
+  求函数 $f(x)=x^3-3x^2-9x+5$ 在 $[-2,4]$ 上的最大值与最小值。
+\end{problem}
+
+\subsection{微分中值定理}
+
+\begin{problem}
+  设 $f(x)$ 在 $[0,1]$ 上连续，$(0,1)$ 内可导，且 $f(0)=0$，$f(1)=1$，
+  证明：存在 $\xi\in(0,1)$ 使得 $f'(\xi)=2\xi$。
+\end{problem}
+
+\begin{problem}
+  验证函数 $f(x)=\ln x$ 在 $[1,\mathrm{e}]$ 上满足 Lagrange 中值定理的条件，并求 $\xi$。
+\end{problem}
+
+\section{不定积分}
+
+\subsection{分部积分法}
+
+\begin{problem}
+  计算 $\displaystyle\int x\,\mathrm{e}^{x}\,\mathrm{d}x$。
+\end{problem}
+
+\begin{problem}
+  计算 $\displaystyle\int \ln x\,\mathrm{d}x$。
+\end{problem}
+
+\subsection{有理函数积分}
+
+\begin{problem}
+  计算 $\displaystyle\int \frac{1}{x^2-1}\,\mathrm{d}x$。
+\end{problem}
+
+\begin{problem}
+  计算 $\displaystyle\int \frac{x+1}{x^2+4x+3}\,\mathrm{d}x$。
+\end{problem}
+
+\subsection{三角函数的积分}
+
+\begin{problem}
+  计算 $\displaystyle\int \sin^2 x\,\mathrm{d}x$。
+\end{problem}
+
+\begin{problem}
+  计算 $\displaystyle\int \frac{1}{1+\cos x}\,\mathrm{d}x$。
+\end{problem}
+
+\subsection{换元法}
+
+\begin{problem}
+  计算 $\displaystyle\int \frac{\ln x}{x}\,\mathrm{d}x$。
+\end{problem}
+
+\begin{problem}
+  计算 $\displaystyle\int \frac{1}{\sqrt{1-x^2}}\,\mathrm{d}x$。
+\end{problem}
+
+\end{document}

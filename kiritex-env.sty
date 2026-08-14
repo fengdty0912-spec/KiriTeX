@@ -1,0 +1,177 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kiritex-env}[2026/06/23 KiriTeX problem environments]
+
+% ---- safety fallback for pad conditional ----
+\@ifundefined{if@kiritex@pad}{\newif\if@kiritex@pad\@kiritex@padfalse}{}
+
+% ---- problem counter (shared across all problem types) ----
+\newcounter{problem}[section]
+\renewcommand{\theproblem}{\thesection.\arabic{problem}}
+
+% Numbering policy:
+% Section headings and problem bodies must contain semantic text only. Do not
+% manually write numbers such as "1.", "第 1 节", or "题 1.1" in titles or
+% problem text; KiriTeX owns all visible numbering through counters below.
+
+% ============================================================
+% 1. Standard problem (简答题/计算题)
+% ============================================================
+\newenvironment{problem}{%
+  \refstepcounter{problem}%
+  \par\medskip\noindent
+  \textbf{题 \theproblem}\quad
+}{%
+  \par\medskip
+  \if@kiritex@pad\clearpage\fi
+}
+
+% ============================================================
+% 2. True/False problem (判断题)
+%    Usage: \begin{problemtf} question text \end{problemtf}
+%    Renders only the generated problem label and the question text.
+%    Choice prompts do not end with punctuation. No trailing parentheses,
+%    blanks, or rules are added.
+% ============================================================
+\newenvironment{problemtf}{%
+  \refstepcounter{problem}%
+  \par\medskip\noindent
+  \textbf{题 \theproblem}\quad
+}{%
+  \par\medskip
+  \if@kiritex@pad\clearpage\fi
+}
+
+% ============================================================
+% 3. Multiple choice problem (选择题)
+%    Usage:
+%      \begin{problemchoice}
+%        question text
+%        \choice{PyCharm}
+%        \choice{Jupyter Notebook}
+%        \choice{Visual Studio Code}
+%        \choice{Anaconda}
+%      \end{problemchoice}
+%
+%    Options auto-labeled A, B, C, D.
+%    Layout auto-detects 1, 2, or 4 options per row based on option widths.
+%    No trailing parentheses, blanks, or rules are added.
+% ============================================================
+
+% Internal storage
+\newcounter{kt@choice@num}
+\newdimen\kt@choice@maxw
+
+% Storage for up to 8 option texts
+\newcommand{\kt@choice@a}{}
+\newcommand{\kt@choice@b}{}
+\newcommand{\kt@choice@c}{}
+\newcommand{\kt@choice@d}{}
+\newcommand{\kt@choice@e}{}
+\newcommand{\kt@choice@f}{}
+\newcommand{\kt@choice@g}{}
+\newcommand{\kt@choice@h}{}
+
+% Helper: get letter from counter value
+\newcommand{\kt@choice@letter}{%
+  \ifcase\value{kt@choice@num}\or A\or B\or C\or D\or E\or F\or G\or H\fi
+}
+
+\newenvironment{problemchoice}{%
+  \refstepcounter{problem}%
+  \par\medskip\noindent
+  \textbf{题 \theproblem}\quad
+  \setcounter{kt@choice@num}{0}%
+  \global\kt@choice@maxw=0pt\relax
+  \let\kt@choice@a\@empty
+  \let\kt@choice@b\@empty
+  \let\kt@choice@c\@empty
+  \let\kt@choice@d\@empty
+  \let\kt@choice@e\@empty
+  \let\kt@choice@f\@empty
+  \let\kt@choice@g\@empty
+  \let\kt@choice@h\@empty
+  \def\choice##1{%
+    \stepcounter{kt@choice@num}%
+    \settowidth{\@tempdima}{\textbf{\kt@choice@letter}.~##1}%
+    \ifdim\@tempdima>\kt@choice@maxw\global\kt@choice@maxw=\@tempdima\fi
+    \ifcase\value{kt@choice@num}%
+      \or\gdef\kt@choice@a{##1}%
+      \or\gdef\kt@choice@b{##1}%
+      \or\gdef\kt@choice@c{##1}%
+      \or\gdef\kt@choice@d{##1}%
+      \or\gdef\kt@choice@e{##1}%
+      \or\gdef\kt@choice@f{##1}%
+      \or\gdef\kt@choice@g{##1}%
+      \or\gdef\kt@choice@h{##1}%
+    \fi
+  }%
+}{%
+  \kt@render@choices
+  \par\medskip
+  \if@kiritex@pad\clearpage\fi
+}
+
+% Render collected choices with auto layout
+\newcommand{\kt@render@choices}{%
+  \par\vspace{4pt}%
+  \ifnum\value{kt@choice@num}=0\relax
+    % no choices
+  \else
+    \ifdim\kt@choice@maxw>0.47\textwidth
+      \kt@render@choices@one
+    \else
+      \ifdim\kt@choice@maxw>0.24\textwidth
+        \kt@render@choices@two
+      \else
+        \kt@render@choices@four
+      \fi
+    \fi
+  \fi
+}
+
+% Render choices as one option per row
+\newcommand{\kt@render@choices@one}{%
+  \ifx\kt@choice@a\@empty\else\noindent\textbf{A}.~\kt@choice@a\par\fi
+  \ifx\kt@choice@b\@empty\else\noindent\textbf{B}.~\kt@choice@b\par\fi
+  \ifx\kt@choice@c\@empty\else\noindent\textbf{C}.~\kt@choice@c\par\fi
+  \ifx\kt@choice@d\@empty\else\noindent\textbf{D}.~\kt@choice@d\par\fi
+  \ifx\kt@choice@e\@empty\else\noindent\textbf{E}.~\kt@choice@e\par\fi
+  \ifx\kt@choice@f\@empty\else\noindent\textbf{F}.~\kt@choice@f\par\fi
+  \ifx\kt@choice@g\@empty\else\noindent\textbf{G}.~\kt@choice@g\par\fi
+  \ifx\kt@choice@h\@empty\else\noindent\textbf{H}.~\kt@choice@h\par\fi
+}
+
+% Render choices as two options per row
+\newcommand{\kt@render@choices@two}{%
+  \begingroup
+  \setlength{\tabcolsep}{0pt}%
+  \noindent\begin{tabular}{@{}p{0.49\textwidth}@{\hspace{0.02\textwidth}}p{0.49\textwidth}@{}}
+    \ifx\kt@choice@a\@empty\else\textbf{A}.~\kt@choice@a\fi &
+    \ifx\kt@choice@b\@empty\else\textbf{B}.~\kt@choice@b\fi \\
+    \ifx\kt@choice@c\@empty\else\textbf{C}.~\kt@choice@c\fi &
+    \ifx\kt@choice@d\@empty\else\textbf{D}.~\kt@choice@d\fi \\
+    \ifx\kt@choice@e\@empty\else\textbf{E}.~\kt@choice@e\fi &
+    \ifx\kt@choice@f\@empty\else\textbf{F}.~\kt@choice@f\fi \\
+    \ifx\kt@choice@g\@empty\else\textbf{G}.~\kt@choice@g\fi &
+    \ifx\kt@choice@h\@empty\else\textbf{H}.~\kt@choice@h\fi \\
+  \end{tabular}%
+  \endgroup
+}
+
+% Render choices as four options per row
+\newcommand{\kt@render@choices@four}{%
+  \begingroup
+  \setlength{\tabcolsep}{0pt}%
+  \noindent\begin{tabular}{@{}p{0.235\textwidth}@{\hspace{0.02\textwidth}}p{0.235\textwidth}@{\hspace{0.02\textwidth}}p{0.235\textwidth}@{\hspace{0.02\textwidth}}p{0.235\textwidth}@{}}
+    \ifx\kt@choice@a\@empty\else\textbf{A}.~\kt@choice@a\fi &
+    \ifx\kt@choice@b\@empty\else\textbf{B}.~\kt@choice@b\fi &
+    \ifx\kt@choice@c\@empty\else\textbf{C}.~\kt@choice@c\fi &
+    \ifx\kt@choice@d\@empty\else\textbf{D}.~\kt@choice@d\fi \\
+    \ifx\kt@choice@e\@empty\else\textbf{E}.~\kt@choice@e\fi &
+    \ifx\kt@choice@f\@empty\else\textbf{F}.~\kt@choice@f\fi &
+    \ifx\kt@choice@g\@empty\else\textbf{G}.~\kt@choice@g\fi &
+    \ifx\kt@choice@h\@empty\else\textbf{H}.~\kt@choice@h\fi \\
+  \end{tabular}%
+  \endgroup
+}
+\endinput

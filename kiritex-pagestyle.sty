@@ -1,0 +1,171 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kiritex-pagestyle}[2026/05/18 KiriTeX page layout, headers, and cover]
+
+% ---- tikz for decorative elements ----
+\RequirePackage{tikz}
+
+% ---- colors are defined in kiritex.cls ----
+
+% ---- safety fallback for \if@kiritex@pad (defined in kiritex.cls) ----
+\@ifundefined{if@kiritex@pad}{\newif\if@kiritex@pad\@kiritex@padfalse}{}
+
+% ---- \KiriTeX logo ----
+% Preserve "KiriTeX" casing. In the TeX suffix, vertical relation is T > X > E.
+\DeclareRobustCommand{\KiriTeX}{%
+  {\fontfamily{lmr}\selectfont
+  Kiri%
+  \kern-.04em\raisebox{0.28ex}{T}%
+  \kern-.12em\raisebox{-0.18ex}{\scalebox{0.72}{E}}%
+  \kern-.05em X}%
+}
+
+% ---- page geometry ----
+\if@kiritex@pad
+  \geometry{
+    papersize={24cm,18cm},
+    left=2.2cm,
+    right=2.2cm,
+    top=1.8cm,
+    bottom=1.8cm,
+    headheight=1.5cm,
+  }
+  \raggedbottom
+\else
+  \geometry{
+    paper=a4paper,
+    left=2.5cm,
+    right=2.5cm,
+    top=3cm,
+    bottom=2.5cm,
+    headheight=1.2cm,
+  }
+\fi
+
+% ---- fancyhdr headers/footers ----
+\fancypagestyle{kiriheadings}{%
+  \fancyhf{}
+  \if@kiritex@pad
+    \fancyhead[L]{%
+      \colorbox{kirinavy}{%
+        \makebox[0.32\textwidth][l]{%
+          \color{white}\bfseries\small\;\leftmark\;%
+        }%
+      }%
+    }
+    \fancyhead[R]{\small\color{kirinavy}\thepage}
+    \fancyfoot[C]{\color{kirigray}\rule{0.25\textwidth}{0.4pt}\\\vspace{2pt}\footnotesize\color{kirigray}\KiriTeX\ 刷题本}
+    \fancyfoot[R]{\footnotesize\color{kiriteal}\hyperlink{kiri:toc}{$\equiv$\ 目录}}
+  \else
+    \fancyhead[L]{%
+      \colorbox{kirinavy}{%
+        \makebox[0.35\textwidth][l]{%
+          \color{white}\bfseries\small\;\leftmark\;%
+        }%
+      }%
+    }
+    \fancyhead[R]{\small\color{kirinavy}\thepage}
+    \fancyfoot[C]{\color{kirigray}\rule{0.2\textwidth}{0.4pt}}
+  \fi
+}
+
+% ---- metadata commands ----
+\def\@problemrange{}
+\newcommand{\problemrange}[1]{\def\@problemrange{#1}}
+\def\@problemcount{}
+\newcommand{\problemcount}[1]{\def\@problemcount{#1}}
+
+% ---- cover page ----
+% Left-right split layout for both modes.
+% Left: navy band with \KiriTeX branding + decorative formula watermarks.
+% Right: \title (primary), \author, \date.
+\renewcommand{\maketitle}{%
+  \begin{titlepage}
+    \thispagestyle{empty}
+    \if@kiritex@pad
+      % ----- PAD landscape cover (24cm×18cm) -----
+      \begin{tikzpicture}[remember picture, overlay]
+        % navy band on left
+        \fill[kirinavy] (current page.north west) rectangle ([xshift=7cm]current page.south west);
+        % decorative formula watermarks on navy band
+        \node[scale=1.2, color=kirinavy!25!white, rotate=10]
+          at ([shift={(3cm,-0.12\paperheight)}]current page.north west)
+          {$\displaystyle\lim_{x\to 0}\frac{\sin x}{x}=1$};
+        \node[scale=0.9, color=kirinavy!25!white, rotate=-8]
+          at ([shift={(4.5cm,-0.65\paperheight)}]current page.north west)
+          {$\displaystyle\int_a^b f(x)\,\mathrm{d}x$};
+        \node[scale=1.0, color=kirinavy!25!white, rotate=15]
+          at ([shift={(2cm,-0.88\paperheight)}]current page.north west)
+          {$\mathrm{e}^{\mathrm{i}\pi}+1=0$};
+        % KiriTeX logo centered on navy band
+        \node[white, scale=1.6] at ([shift={(3.5cm,-0.42\paperheight)}]current page.north west) {\KiriTeX};
+        % separator line
+        \draw[white, line width=0.5pt] ([shift={(7.3cm,0)}]current page.north west) -- ([shift={(7.3cm,0)}]current page.south west);
+        % right side decorative accent
+        \fill[kirinavy!10] (current page.north east) rectangle ([shift={(-1cm,-0.06\paperheight)}]current page.north east);
+        \node[scale=0.7, color=kirinavy!15, rotate=-5] at ([shift={(-4cm,-0.9\paperheight)}]current page.south east)
+          {$\displaystyle\sum_{n=1}^{\infty}\frac{1}{n^2}=\frac{\pi^2}{6}$};
+        % right side: title + author + date (aligned with logo)
+        \node[anchor=west, text width=8.5cm, align=flush left] at ([shift={(8.5cm,-0.42\paperheight)}]current page.north west) {%
+          \ifx\@title\@empty\else{\Huge\bfseries\color{kirinavy}\@title}\\[0.6cm]\fi
+          \ifx\@author\@empty\else{\Large\@author}\\[0.3cm]\fi
+          \ifx\@date\@empty\else{\large\color{kirigray}\@date}\fi
+        };
+      \end{tikzpicture}
+    \else
+      % ----- A4 portrait cover -----
+      \begin{tikzpicture}[remember picture, overlay]
+        % navy band on left (40% of page width)
+        \fill[kirinavy] (current page.north west) rectangle ([xshift=0.4\paperwidth]current page.south west);
+        % decorative formula watermarks on navy band
+        \node[scale=1.4, color=kirinavy!22!white, rotate=12]
+          at ([shift={(0.14\paperwidth,-0.16\paperheight)}]current page.north west)
+          {$\displaystyle\lim_{x\to 0}\frac{\sin x}{x}=1$};
+        \node[scale=1.1, color=kirinavy!22!white, rotate=-6]
+          at ([shift={(0.26\paperwidth,-0.36\paperheight)}]current page.north west)
+          {$\displaystyle\int_a^b f(x)\,\mathrm{d}x$};
+        \node[scale=1.0, color=kirinavy!22!white, rotate=8]
+          at ([shift={(0.1\paperwidth,-0.64\paperheight)}]current page.north west)
+          {$\mathrm{e}^{\mathrm{i}\pi}+1=0$};
+        \node[scale=0.9, color=kirinavy!22!white, rotate=-10]
+          at ([shift={(0.24\paperwidth,-0.84\paperheight)}]current page.north west)
+          {$\displaystyle\sum_{n=1}^{\infty}\frac{1}{n^2}=\frac{\pi^2}{6}$};
+        % KiriTeX logo centered on navy band
+        \node[white, scale=2.0] at ([shift={(0.2\paperwidth,-0.45\paperheight)}]current page.north west) {\KiriTeX};
+        % right side decorative accent (top corner)
+        \fill[kirinavy!8] (current page.north east) rectangle ([shift={(-2cm,-0.05\paperheight)}]current page.north east);
+        \node[scale=0.8, color=kirinavy!12, rotate=6] at ([shift={(-3.5cm,-0.92\paperheight)}]current page.south east)
+          {$\displaystyle\frac{\mathrm{d}}{\mathrm{d}x}\mathrm{e}^x=\mathrm{e}^x$};
+        % right side: title + author + date (aligned with logo)
+        \node[anchor=west, text width=0.52\paperwidth, align=flush left] at ([shift={(0.45\paperwidth,-0.45\paperheight)}]current page.north west) {%
+          \ifx\@title\@empty\else{\Huge\bfseries\color{kirinavy}\@title}\\[0.6cm]\fi
+          \ifx\@author\@empty\else{\Large\@author}\\[0.3cm]\fi
+          \ifx\@date\@empty\else{\large\color{kirigray}\@date}\fi
+        };
+      \end{tikzpicture}
+    \fi
+  \end{titlepage}
+}
+
+% ---- hyperlinks ----
+\hypersetup{
+  colorlinks=true,
+  linkcolor=kiriteal,
+  urlcolor=kiriteal,
+}
+
+% ---- table of contents anchor for pad navigation ----
+\AddToHook{cmd/tableofcontents/before}{\hypertarget{kiri:toc}{}}
+
+% ---- section/subsection styling ----
+% \clearpage before each \section (top-level divider)
+\AddToHook{cmd/section/before}{\clearpage}
+
+% section is the top-level divider; make it prominent with a rule below
+\titleformat{\section}
+  {\LARGE\bfseries\color{kirinavy}}
+  {\thesection}{1em}{}
+  [\vspace{-0.2cm}\textcolor{kirinavy}{\rule{\textwidth}{1.5pt}}\vspace{0.5cm}]
+
+\titleformat{\subsection}
+  {\Large\bfseries\color{kirinavy!80}}
+  {\thesubsection}{1em}{}
