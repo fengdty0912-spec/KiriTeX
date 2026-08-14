@@ -1,10 +1,13 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{kiritex}[2026/07/19 v1.0.1 KiriTeX problem workbook template]
+\ProvidesClass{kiritex}[2026/07/30 v1.1.0 KiriTeX problem workbook template]
 
-% ---- pad mode toggle ----
+% ---- class option toggles ----
 \newif\if@kiritex@pad
 \@kiritex@padfalse
+\newif\if@kiritex@answers
+\@kiritex@answersfalse
 \DeclareOption{pad}{\@kiritex@padtrue}
+\DeclareOption{answers}{\@kiritex@answerstrue}
 
 % Pass unknown options to ctexart
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{ctexart}}
@@ -42,6 +45,7 @@
 % ---- additional settings ----
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.5\baselineskip}
+\newcommand{\kiritexversion}{1.1.0}
 
 \AtBeginDocument{%
   \if@kiritex@pad\zihao{-4}\fi

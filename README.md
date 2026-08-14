@@ -4,6 +4,9 @@ KiriTeX 是一个基于 XeLaTeX + ctex 的中文题本模板，适合数学、�
 
 - `\documentclass{kiritex}`：A4 竖版，适合打印讲义。
 - `\documentclass[pad]{kiritex}`：Pad 横版，默认一页一题，适合平板阅读和批注。
+- `\documentclass[answers]{kiritex}`：教师版，显示 `\answer{...}` 写入的答案。
+
+当前版本：`1.1.0`。
 
 ## 快速开始
 
@@ -21,25 +24,29 @@ KiriTeX 是一个基于 XeLaTeX + ctex 的中文题本模板，适合数学、�
 \section{极限与连续}
 \subsection{极限的计算}
 
-\begin{problem}
+\begin{problem}[基础]
   求极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$。
+  \answer{极限值为 $1$。}
 \end{problem}
 
-\begin{problemchoice}
+\begin{problemchoice}[选择]
   极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$ 的值是
   \choice{0}
   \choice{1}
   \choice{$\infty$}
   \choice{不存在}
+  \answer{B。}
 \end{problemchoice}
-
-\begin{problemtf}
-  若函数在一点可导，则它在该点连续。
-\end{problemtf}
 \end{document}
 ```
 
-编译示例：
+默认不显示答案。把第一行改成下面形式即可生成教师版：
+
+```latex
+\documentclass[answers]{kiritex}
+```
+
+## 编译
 
 ```bash
 xelatex demo-a4.tex
@@ -72,17 +79,18 @@ KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写
 ### 简答题 / 计算题
 
 ```latex
-\begin{problem}
+\begin{problem}[基础]
   求函数 $f(x)=x^2\sin x$ 的导数。
+  \answer{$f'(x)=2x\sin x+x^2\cos x$。}
 \end{problem}
 ```
 
-`problem` 环境会自动输出统一题号，格式如「题 1.1」。
+`problem` 环境会自动输出统一题号，格式如「题 1.1」。可选参数 `[基础]`、`[综合]`、`[证明]` 等会显示为题目标记；标记不是编号，不参与计数。
 
 大题下的小题使用 `problemsubparts`，只写 `\item`，不要手写小题编号。小题编号自动显示为英文括号形式 `(1)`、`(2)`，并从左侧正常顶齐。
 
 ```latex
-\begin{problem}
+\begin{problem}[综合]
   计算下列极限：
   \begin{problemsubparts}
     \item $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$
@@ -99,23 +107,14 @@ KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写
 \underline{\quad\quad\quad\quad\quad\quad}
 ```
 
-句中填空用普通形式：
-
-```latex
-函数 $f(x)$ 的定义域是 \problemblock，值域是 \problemblock。
-```
-
-句末填空用星号形式 `\problemblock*`，模板会在横线后补一个不带下划线的中文句号：
-
-```latex
-重要极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$ 的值是 \problemblock*
-```
+句末填空用星号形式 `\problemblock*`，模板会在横线后补一个不带下划线的中文句号。
 
 ### 判断题
 
 ```latex
-\begin{problemtf}
+\begin{problemtf}[判断]
   若函数在一点可导，则它在该点连续。
+  \answer{正确。}
 \end{problemtf}
 ```
 
@@ -124,18 +123,29 @@ KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写
 ### 选择题
 
 ```latex
-\begin{problemchoice}
+\begin{problemchoice}[选择]
   以下哪个函数在 $x=0$ 处连续
   \choice{$f(x)=x$}
   \choice{$f(x)=1/x$}
   \choice{$f(x)=|x|/x$}
   \choice{$f(x)=\tan(1/x)$}
+  \answer{A。}
 \end{problemchoice}
 ```
 
-`problemchoice` 用 `\choice{...}` 写选项内容。选择题题干末尾不写句号、问号或任何收尾标点。模板自动生成 A、B、C、D 等字母，并根据最长选项的宽度自动调整为每行四个、两个或一个选项。选择题题后不自动添加横线、括号或留空标记。
+选择题题干末尾不写句号、问号或任何收尾标点。模板自动生成 A、B、C、D 等字母，并根据最长选项的宽度自动调整为每行四个、两个或一个选项。选择题题后不自动添加横线、括号或留空标记。
 
-1.0 版本只提供 `problem`、`problemtf`、`problemchoice` 三个题目环境；小题用 `problemsubparts`，填空用 `\problemblock`。
+1.x 版本的题目环境仍为 `problem`、`problemtf`、`problemchoice`；小题用 `problemsubparts`，填空用 `\problemblock`。
+
+## 答案
+
+`\answer{...}` 默认隐藏，适合学生版。使用 `answers` 类选项后显示为教师版：
+
+```latex
+\documentclass[answers]{kiritex}
+```
+
+答案内容跟随题目书写，不建立额外编号，也不改变题号计数。
 
 ## 版式
 
@@ -157,49 +167,22 @@ A4 竖版适合连续阅读和打印，题目自然流动排版。Pad 横版适�
 
 `KiriTeX` logo 保留大小写，TeX 后缀的高度关系为 `T > X > E`。
 
-## 答案
-
-模板默认不内置答案系统，避免题本和答案耦合。需要答案时，可以使用外部宏包或条件编译。
-
-使用 `answers` 宏包的基本方式：
-
-```latex
-\usepackage{answers}
-\Newassociation{sol}{Solution}{ans}
-\newcommand{\answer}[1]{\begin{sol}#1\end{sol}}
-
-\begin{document}
-\Opensolutionfile{ans}
-
-\section{极限}
-\begin{problem}
-  求 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$。
-\end{problem}
-\answer{极限值为 1。}
-
-\Closesolutionfile{ans}
-\newpage
-\section*{参考答案}
-\input{ans}
-\end{document}
-```
-
 ## 文件结构
 
 | 文件 | 用途 |
 | --- | --- |
 | `kiritex.cls` | 类文件入口、选项解析、字体和基础包 |
-| `kiritex-env.sty` | `problem` / `problemtf` / `problemchoice` 题型环境，小题和填空命令 |
+| `kiritex-env.sty` | `problem` / `problemtf` / `problemchoice` 题型环境，小题、填空和答案命令 |
 | `kiritex-pagestyle.sty` | 页面尺寸、页眉页脚、封面、颜色和 logo |
-| `demo-a4.tex` | A4 竖版示例 |
-| `demo-pad.tex` | Pad 横版示例 |
+| `demo-a4.tex` | A4 竖版教师版示例 |
+| `demo-pad.tex` | Pad 横版学生版示例 |
 | `docs/superpowers/specs/2026-05-18-kiritex-design.md` | 稳定设计规范，供后续 agent 阅读 |
 | `docs/superpowers/plans/2026-05-18-kiritex.md` | 按模块组织的维护计划 |
 | `CHANGELOG.md` | 版本历史 |
 
 ## 维护
 
-未来 agent 修改类文件或样式文件前，应先阅读设计规范和 `AGENTS.md`。KiriTeX 从 KazeTeX 的历史中保留了稳健 logo、封面公式水印、logo 与标题对齐、Pad 目录跳转等经验，但 1.0 API 以本文档为准，不恢复旧命令名。
+未来 agent 修改类文件或样式文件前，应先阅读设计规范和 `AGENTS.md`。KiriTeX 从 KazeTeX 的历史中保留了稳健 logo、封面公式水印、logo 与标题对齐、Pad 目录跳转等经验，但 1.x API 以本文档为准，不恢复旧命令名。
 
 版本变化记录在 `CHANGELOG.md`。
 

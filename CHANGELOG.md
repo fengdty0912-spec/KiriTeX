@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.0 - 2026-07-30
+
+- Preserved the previous release at Git tag `v1.0.1`; this version is a compatible 1.x enhancement.
+- Added the `answers` class option. `\answer{...}` is hidden by default and printed inline when `answers` is enabled.
+- Added optional semantic tags to `problem`, `problemtf`, and `problemchoice`, e.g. `\begin{problem}[基础]`.
+- Kept all KiriTeX 1.0 problem environment names unchanged: `problem`, `problemtf`, and `problemchoice`.
+- Updated `demo-a4.tex` as an A4 teacher-edition sample with visible answers.
+- Updated `demo-pad.tex` as a Pad student-edition sample with hidden answers and one problem per page.
+- Rewrote README around the 1.1 workflow and documented the new answer/tag syntax.
+- Updated the design spec and maintenance plan so future agents understand the new contracts.
+
 ## 1.0.1 - 2026-07-19
 
 - Learned from the sibling KazeTeX history and documented the useful carry-over rules: robust logo construction, logo/title alignment on the cover, quiet formula watermarks, Pad TOC navigation via `\hypertarget`, and avoidance of decorative cover subtitles.

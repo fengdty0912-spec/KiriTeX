@@ -1,9 +1,10 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{kiritex-env}[2026/07/19 KiriTeX problem environments]
+\ProvidesPackage{kiritex-env}[2026/07/30 v1.1.0 KiriTeX problem environments]
 \RequirePackage{xparse}
 
-% ---- safety fallback for pad conditional ----
+% ---- safety fallbacks for class conditionals ----
 \@ifundefined{if@kiritex@pad}{\newif\if@kiritex@pad\@kiritex@padfalse}{}
+\@ifundefined{if@kiritex@answers}{\newif\if@kiritex@answers\@kiritex@answersfalse}{}
 
 % ---- problem counter (shared across all problem types) ----
 \newcounter{problem}[section]
@@ -15,12 +16,38 @@
 % problem text; KiriTeX owns all visible numbering through counters below.
 % Subparts use (1), (2), ... at the left edge; do not hand-write subpart labels.
 
+% ---- problem label helpers ----
+\newcommand{\kt@problem@tag}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{1.5pt}%
+  \textcolor{kiriteal}{\footnotesize\sffamily\bfseries #1}%
+  \endgroup
+}
+
+\NewDocumentCommand{\kt@problem@head}{m}{%
+  \refstepcounter{problem}%
+  \par\medskip\noindent
+  \textbf{题 \theproblem}%
+  \if\relax\detokenize{#1}\relax\else\quad\kt@problem@tag{#1}\fi
+  \quad
+}
+
 % ---- fill-in blank command ----
 % Use \problemblock inside a sentence. Use \problemblock* at sentence end; the
 % starred form appends an un-underlined Chinese full stop after the blank.
 \NewDocumentCommand{\problemblock}{s}{%
   \underline{\quad\quad\quad\quad\quad\quad}%
   \IfBooleanT{#1}{。}%
+}
+
+% ---- optional answer output ----
+% Hidden by default. Use \documentclass[answers]{kiritex} to print answers.
+\NewDocumentCommand{\answer}{m}{%
+  \if@kiritex@answers
+    \par\smallskip
+    \noindent{\textcolor{kiriteal}{\bfseries 参考答案}}\quad #1%
+    \par\smallskip
+  \fi
 }
 
 % ---- subparts under one problem ----
@@ -46,11 +73,10 @@
 
 % ============================================================
 % 1. Standard problem
+%    Optional tag: \begin{problem}[基础] ... \end{problem}
 % ============================================================
-\newenvironment{problem}{%
-  \refstepcounter{problem}%
-  \par\medskip\noindent
-  \textbf{题 \theproblem}\quad
+\NewDocumentEnvironment{problem}{o}{%
+  \IfNoValueTF{#1}{\kt@problem@head{}}{\kt@problem@head{#1}}%
 }{%
   \par\medskip
   \if@kiritex@pad\clearpage\fi
@@ -58,14 +84,12 @@
 
 % ============================================================
 % 2. True/False problem
-%    Usage: \begin{problemtf} statement text \end{problemtf}
+%    Optional tag: \begin{problemtf}[判断] ... \end{problemtf}
 %    Renders only the generated problem label and the statement text.
 %    No trailing parentheses, blanks, or rules are added.
 % ============================================================
-\newenvironment{problemtf}{%
-  \refstepcounter{problem}%
-  \par\medskip\noindent
-  \textbf{题 \theproblem}\quad
+\NewDocumentEnvironment{problemtf}{o}{%
+  \IfNoValueTF{#1}{\kt@problem@head{}}{\kt@problem@head{#1}}%
 }{%
   \par\medskip
   \if@kiritex@pad\clearpage\fi
@@ -73,15 +97,8 @@
 
 % ============================================================
 % 3. Multiple choice problem
-%    Usage:
-%      \begin{problemchoice}
-%        prompt text with no closing punctuation
-%        \choice{PyCharm}
-%        \choice{Jupyter Notebook}
-%        \choice{Visual Studio Code}
-%        \choice{Anaconda}
-%      \end{problemchoice}
-%
+%    Optional tag: \begin{problemchoice}[选择] ... \end{problemchoice}
+%    Prompt text must not end with closing punctuation.
 %    Options auto-labeled A, B, C, D.
 %    Layout auto-detects 1, 2, or 4 options per row based on option widths.
 %    No trailing parentheses, blanks, or rules are added.
@@ -106,10 +123,8 @@
   \ifcase\value{kt@choice@num}\or A\or B\or C\or D\or E\or F\or G\or H\fi
 }
 
-\newenvironment{problemchoice}{%
-  \refstepcounter{problem}%
-  \par\medskip\noindent
-  \textbf{题 \theproblem}\quad
+\NewDocumentEnvironment{problemchoice}{o}{%
+  \IfNoValueTF{#1}{\kt@problem@head{}}{\kt@problem@head{#1}}%
   \setcounter{kt@choice@num}{0}%
   \global\kt@choice@maxw=0pt\relax
   \let\kt@choice@a\@empty

@@ -49,6 +49,15 @@ Use Latin Modern for the logo shape so it remains stable across Chinese fontsets
 | Problem flow | continuous | one problem per page |
 | Intended use | print and PDF handout | tablet reading and annotation |
 
+The `answers` class option is independent from page mode:
+
+```latex
+\documentclass[answers]{kiritex}
+\documentclass[pad,answers]{kiritex}
+```
+
+Without `answers`, `\answer{...}` content is hidden. With `answers`, answers are printed inline after the related prompt.
+
 ## Typography
 
 - Western text uses Latin Modern Roman / Sans / Mono.
@@ -66,6 +75,16 @@ All problem types share the same counter, reset by `section`.
 For calculation, proof, and short-answer prompts.
 
 Expected output prefix: `题 <section>.<number>`.
+
+All problem-like environments accept an optional semantic tag:
+
+```latex
+\begin{problem}[基础]
+  ...
+\end{problem}
+```
+
+Tags such as `基础`, `综合`, `证明`, `判断`, or `选择` are descriptive metadata. They must not be used for manual numbering.
 
 ### `problemsubparts`
 
@@ -164,7 +183,6 @@ Check that:
 
 ## Future Work
 
-- Built-in answer toggles.
-- Tags or difficulty labels.
+- Dedicated answer-section generation.
 - Better visual regression checks for cover/logo placement.
 - Optional diagram helpers for math, physics, and engineering exercises.
