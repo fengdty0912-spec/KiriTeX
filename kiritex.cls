@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{kiritex}[2026/08/14 v1.0.2 KiriTeX problem workbook template]
+\ProvidesClass{kiritex}[2026/08/14 v1.0.3 KiriTeX problem workbook template]
 
 % ---- class option toggles ----
 \newif\if@kiritex@pad
@@ -13,9 +13,9 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{ctexart}}
 \ProcessOptions\relax
 
-% Load base class (zihao as class option only supports 5, -4, false in TL2026)
-% Keep the default text smaller; pad mode bumps this once at begin document.
-\LoadClass[zihao=5,a4paper]{ctexart}
+% Load base class. Body sizes are set explicitly via \zihao in \AtBeginDocument
+% because the zihao class option only supports 5, -4, false in TL2026.
+\LoadClass[a4paper]{ctexart}
 
 % ---- required packages ----
 \RequirePackage{xcolor}
@@ -46,9 +46,13 @@
 % ---- additional settings ----
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.5\baselineskip}
-\newcommand{\kiritexversion}{1.0.2}
+\newcommand{\kiritexversion}{1.0.3}
 
 \AtBeginDocument{%
-  \if@kiritex@pad\zihao{-4}\fi
+  \if@kiritex@pad
+    \zihao{5}%    Pad: 五号 (10.5pt)
+  \else
+    \zihao{-5}%   A4:  小五 (9pt)
+  \fi
   \pagestyle{kiriheadings}%
 }

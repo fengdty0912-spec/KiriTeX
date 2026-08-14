@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.3 - 2026-08-14
+
+- Shrunk the body font: A4 uses 小五 (9pt), Pad uses 五号 (10.5pt). Body sizes are now set explicitly via `\zihao` in `\AtBeginDocument`.
+- Added a display-formula punctuation rule to the math style guide and AGENTS.md: text after `\[ ... \]` must not begin with a period or other closing punctuation.
+- Expanded the demos to showcase vectors/matrices, partial derivatives, gradients, units, mid-sentence `\problemblock`, and multi-option choices.
+- Switched vectors and matrices to `\bm` (bold) consistently.
+- Added `tools/mineru2kiritex.py` (MinerU Markdown → KiriTeX converter) and `docs/mineru-workflow.md` (PDF/image → KiriTeX workflow).
+
 ## 1.0.2 - 2026-08-14
 
 - Removed the semantic-tag feature introduced in 1.1.0: `problem`, `problemtf`, and `problemchoice` no longer accept an optional `[标签]` argument, and no tag is rendered after the problem label. The `answers` option from 1.1.0 is retained.

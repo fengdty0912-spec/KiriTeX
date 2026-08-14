@@ -21,7 +21,8 @@ Required project rules:
 - `problemchoice` prompts must not end with a period, question mark, Chinese full stop, Chinese question mark, or any other closing punctuation.
 - Subparts under one problem must use `problemsubparts`, render as `(1)`, `(2)`, etc. with English parentheses, and start from the left edge.
 - Fill-in blanks use `\problemblock`; the fixed blank is `\underline{\quad\quad\quad\quad\quad\quad}`. Use `\problemblock*` at sentence end to append an un-underlined Chinese full stop.
-- Follow `docs/superpowers/specs/2026-08-14-kiritex-math-style.md` for formula writing: upright `\mathrm{e}` / `\mathrm{i}` / `\mathrm{d}` / units, `\vec` for vectors, `\bm` for matrices, and `\[ ... \]` for unnumbered display math.
+- Follow `docs/superpowers/specs/2026-08-14-kiritex-math-style.md` for formula writing: upright `\mathrm{e}` / `\mathrm{i}` / `\mathrm{d}` / units, `\bm` for both vectors and matrices, and `\[ ... \]` for unnumbered display math.
+- After a display formula (`\[ ... \]` or `equation`), the following text must not begin with a period or other closing punctuation; put the period inside the formula or rephrase.
 - README and design docs should be organized by feature area, not by chronological implementation notes.
 - Keep the CHANGELOG as the place for dated changes.
 - Preserve old released versions with Git tags; `v1.0.1` is the compatibility baseline before 1.1.0.

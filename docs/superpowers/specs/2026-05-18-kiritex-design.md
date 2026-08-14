@@ -45,7 +45,7 @@ Use Latin Modern for the logo shape so it remains stable across Chinese fontsets
 | --- | --- | --- |
 | Class option | `\documentclass{kiritex}` | `\documentclass[pad]{kiritex}` |
 | Page shape | A4 portrait | 24 cm × 18 cm landscape |
-| Body size | 五号 | 小四 |
+| Body size | 小五 | 五号 |
 | Problem flow | continuous | one problem per page |
 | Intended use | print and PDF handout | tablet reading and annotation |
 

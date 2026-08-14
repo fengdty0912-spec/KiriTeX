@@ -6,7 +6,7 @@ KiriTeX 是一个基于 XeLaTeX + ctex 的中文题本模板，适合数学、�
 - `\documentclass[pad]{kiritex}`：Pad 横版，默认一页一题，适合平板阅读和批注。
 - `\documentclass[answers]{kiritex}`：教师版，显示 `\answer{...}` 写入的答案。
 
-当前版本：`1.0.2`。
+当前版本：`1.0.3`。
 
 ## 快速开始
 
@@ -81,7 +81,7 @@ KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写
 - 行间公式用 `\[ ... \]`（默认不编号），行内用 `$ ... $`，多行对齐用 `align*`，需要编号时用 `equation`。
 - 变量用斜体，函数名、常数、单位、化学式、微分算子用正体：`\sin x`、`\mathrm{e}`、`\mathrm{i}`、`\mathrm{d}x`、`\mathrm{Pa}`、`\mathrm{O_2}`。
 - 多字母下标用正体：`P_{\mathrm{ext}}`。
-- 向量用 `\vec{v}`，矩阵/张量用 `\bm{A}`。
+- 向量与矩阵/张量都用 `\bm`：`\bm{v}`、`\bm{A}`。
 - 积分写 `\int_a^b f(x)\,\mathrm{d}x`。
 
 ## 题型
@@ -160,7 +160,7 @@ KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写
 
 A4 竖版适合连续阅读和打印，题目自然流动排版。Pad 横版适合平板阅读，每道题结束后自动换页。
 
-正文西文字体为 Latin Modern，中文字体由 ctex 根据系统环境选择。默认字号偏紧凑：A4 使用五号，Pad 模式使用小四。
+正文西文字体为 Latin Modern，中文字体由 ctex 根据系统环境选择。默认字号偏紧凑：A4 使用小五，Pad 模式使用五号。
 
 ## 封面
 
@@ -188,6 +188,8 @@ A4 竖版适合连续阅读和打印，题目自然流动排版。Pad 横版适�
 | `docs/superpowers/specs/2026-05-18-kiritex-design.md` | 稳定设计规范，供后续 agent 阅读 |
 | `docs/superpowers/specs/2026-08-14-kiritex-math-style.md` | 数学公式写作规范 |
 | `docs/superpowers/plans/2026-05-18-kiritex.md` | 按模块组织的维护计划 |
+| `tools/mineru2kiritex.py` | MinerU 输出转 KiriTeX 的转换脚本 |
+| `docs/mineru-workflow.md` | MinerU → KiriTeX 工作流说明 |
 | `CHANGELOG.md` | 版本历史 |
 
 ## 维护
