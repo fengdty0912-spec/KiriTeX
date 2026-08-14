@@ -1,10 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{kiritex-pagestyle}[2026/05/18 KiriTeX page layout, headers, and cover]
+\ProvidesPackage{kiritex-pagestyle}[2026/07/19 KiriTeX page layout, headers, and cover]
 
-% ---- tikz for decorative elements ----
 \RequirePackage{tikz}
-
-% ---- colors are defined in kiritex.cls ----
 
 % ---- safety fallback for \if@kiritex@pad (defined in kiritex.cls) ----
 \@ifundefined{if@kiritex@pad}{\newif\if@kiritex@pad\@kiritex@padfalse}{}
@@ -53,7 +50,7 @@
       }%
     }
     \fancyhead[R]{\small\color{kirinavy}\thepage}
-    \fancyfoot[C]{\color{kirigray}\rule{0.25\textwidth}{0.4pt}\\\vspace{2pt}\footnotesize\color{kirigray}\KiriTeX\ 刷题本}
+    \fancyfoot[C]{\color{kirigray}\rule{0.25\textwidth}{0.4pt}\\\vspace{2pt}\footnotesize\color{kirigray}\KiriTeX}
     \fancyfoot[R]{\footnotesize\color{kiriteal}\hyperlink{kiri:toc}{$\equiv$\ 目录}}
   \else
     \fancyhead[L]{%
@@ -75,18 +72,16 @@
 \newcommand{\problemcount}[1]{\def\@problemcount{#1}}
 
 % ---- cover page ----
-% Left-right split layout for both modes.
-% Left: navy band with \KiriTeX branding + decorative formula watermarks.
-% Right: \title (primary), \author, \date.
+% KazeTeX history showed three useful cover rules that KiriTeX keeps:
+% use quiet formula watermarks, keep the logo aligned with title metadata, and
+% do not add decorative subtitles such as "刷题本" beyond user-provided metadata.
 \renewcommand{\maketitle}{%
   \begin{titlepage}
     \thispagestyle{empty}
     \if@kiritex@pad
-      % ----- PAD landscape cover (24cm×18cm) -----
+      % ----- Pad landscape cover (24cm x 18cm) -----
       \begin{tikzpicture}[remember picture, overlay]
-        % navy band on left
         \fill[kirinavy] (current page.north west) rectangle ([xshift=7cm]current page.south west);
-        % decorative formula watermarks on navy band
         \node[scale=1.2, color=kirinavy!25!white, rotate=10]
           at ([shift={(3cm,-0.12\paperheight)}]current page.north west)
           {$\displaystyle\lim_{x\to 0}\frac{\sin x}{x}=1$};
@@ -96,15 +91,11 @@
         \node[scale=1.0, color=kirinavy!25!white, rotate=15]
           at ([shift={(2cm,-0.88\paperheight)}]current page.north west)
           {$\mathrm{e}^{\mathrm{i}\pi}+1=0$};
-        % KiriTeX logo centered on navy band
         \node[white, scale=1.6] at ([shift={(3.5cm,-0.42\paperheight)}]current page.north west) {\KiriTeX};
-        % separator line
         \draw[white, line width=0.5pt] ([shift={(7.3cm,0)}]current page.north west) -- ([shift={(7.3cm,0)}]current page.south west);
-        % right side decorative accent
         \fill[kirinavy!10] (current page.north east) rectangle ([shift={(-1cm,-0.06\paperheight)}]current page.north east);
         \node[scale=0.7, color=kirinavy!15, rotate=-5] at ([shift={(-4cm,-0.9\paperheight)}]current page.south east)
           {$\displaystyle\sum_{n=1}^{\infty}\frac{1}{n^2}=\frac{\pi^2}{6}$};
-        % right side: title + author + date (aligned with logo)
         \node[anchor=west, text width=8.5cm, align=flush left] at ([shift={(8.5cm,-0.42\paperheight)}]current page.north west) {%
           \ifx\@title\@empty\else{\Huge\bfseries\color{kirinavy}\@title}\\[0.6cm]\fi
           \ifx\@author\@empty\else{\Large\@author}\\[0.3cm]\fi
@@ -114,9 +105,7 @@
     \else
       % ----- A4 portrait cover -----
       \begin{tikzpicture}[remember picture, overlay]
-        % navy band on left (40% of page width)
         \fill[kirinavy] (current page.north west) rectangle ([xshift=0.4\paperwidth]current page.south west);
-        % decorative formula watermarks on navy band
         \node[scale=1.4, color=kirinavy!22!white, rotate=12]
           at ([shift={(0.14\paperwidth,-0.16\paperheight)}]current page.north west)
           {$\displaystyle\lim_{x\to 0}\frac{\sin x}{x}=1$};
@@ -129,13 +118,10 @@
         \node[scale=0.9, color=kirinavy!22!white, rotate=-10]
           at ([shift={(0.24\paperwidth,-0.84\paperheight)}]current page.north west)
           {$\displaystyle\sum_{n=1}^{\infty}\frac{1}{n^2}=\frac{\pi^2}{6}$};
-        % KiriTeX logo centered on navy band
         \node[white, scale=2.0] at ([shift={(0.2\paperwidth,-0.45\paperheight)}]current page.north west) {\KiriTeX};
-        % right side decorative accent (top corner)
         \fill[kirinavy!8] (current page.north east) rectangle ([shift={(-2cm,-0.05\paperheight)}]current page.north east);
         \node[scale=0.8, color=kirinavy!12, rotate=6] at ([shift={(-3.5cm,-0.92\paperheight)}]current page.south east)
           {$\displaystyle\frac{\mathrm{d}}{\mathrm{d}x}\mathrm{e}^x=\mathrm{e}^x$};
-        % right side: title + author + date (aligned with logo)
         \node[anchor=west, text width=0.52\paperwidth, align=flush left] at ([shift={(0.45\paperwidth,-0.45\paperheight)}]current page.north west) {%
           \ifx\@title\@empty\else{\Huge\bfseries\color{kirinavy}\@title}\\[0.6cm]\fi
           \ifx\@author\@empty\else{\Large\@author}\\[0.3cm]\fi
@@ -157,10 +143,8 @@
 \AddToHook{cmd/tableofcontents/before}{\hypertarget{kiri:toc}{}}
 
 % ---- section/subsection styling ----
-% \clearpage before each \section (top-level divider)
 \AddToHook{cmd/section/before}{\clearpage}
 
-% section is the top-level divider; make it prominent with a rule below
 \titleformat{\section}
   {\LARGE\bfseries\color{kirinavy}}
   {\thesection}{1em}{}
@@ -169,3 +153,4 @@
 \titleformat{\subsection}
   {\Large\bfseries\color{kirinavy!80}}
   {\thesubsection}{1em}{}
+\endinput

@@ -1,6 +1,6 @@
-﻿# KiriTeX
+# KiriTeX
 
-KiriTeX 是一个基于 XeLaTeX + ctex 的刷题本模板，适合中文数学、物理和工程类题集。模板提供两种版式：
+KiriTeX 是一个基于 XeLaTeX + ctex 的中文题本模板，适合数学、物理和工程类讲义。它用同一份源文件生成两种版式：
 
 - `\documentclass{kiritex}`：A4 竖版，适合打印讲义。
 - `\documentclass[pad]{kiritex}`：Pad 横版，默认一页一题，适合平板阅读和批注。
@@ -12,7 +12,7 @@ KiriTeX 是一个基于 XeLaTeX + ctex 的刷题本模板，适合中文数学�
 
 \title{高等数学习题集}
 \author{风待桐叶}
-\date{2026 年 6 月}
+\date{2026 年 7 月}
 
 \begin{document}
 \maketitle
@@ -26,7 +26,7 @@ KiriTeX 是一个基于 XeLaTeX + ctex 的刷题本模板，适合中文数学�
 \end{problem}
 
 \begin{problemchoice}
-  极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$ 的值是多少
+  极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$ 的值是
   \choice{0}
   \choice{1}
   \choice{$\infty$}
@@ -34,7 +34,7 @@ KiriTeX 是一个基于 XeLaTeX + ctex 的刷题本模板，适合中文数学�
 \end{problemchoice}
 
 \begin{problemtf}
-  极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}=1$。
+  若函数在一点可导，则它在该点连续。
 \end{problemtf}
 \end{document}
 ```
@@ -56,7 +56,7 @@ make all
 
 ## 写作规则
 
-KiriTeX 自动管理章节、题号和选择题选项编号。正文只写内容，不手写序号。
+KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写内容，不手写序号。
 
 - 正确：`\section{极限与连续}`
 - 避免：`\section{第一章 极限与连续}` 或 `\section{1. 极限与连续}`
@@ -78,6 +78,38 @@ KiriTeX 自动管理章节、题号和选择题选项编号。正文只写内容
 ```
 
 `problem` 环境会自动输出统一题号，格式如「题 1.1」。
+
+大题下的小题使用 `problemsubparts`，只写 `\item`，不要手写小题编号。小题编号自动显示为英文括号形式 `(1)`、`(2)`，并从左侧正常顶齐。
+
+```latex
+\begin{problem}
+  计算下列极限：
+  \begin{problemsubparts}
+    \item $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$
+    \item $\displaystyle\lim_{x\to 0}\frac{1-\cos x}{x^2}$
+  \end{problemsubparts}
+\end{problem}
+```
+
+### 填空题
+
+填空使用 `\problemblock`，固定渲染为：
+
+```latex
+\underline{\quad\quad\quad\quad\quad\quad}
+```
+
+句中填空用普通形式：
+
+```latex
+函数 $f(x)$ 的定义域是 \problemblock，值域是 \problemblock。
+```
+
+句末填空用星号形式 `\problemblock*`，模板会在横线后补一个不带下划线的中文句号：
+
+```latex
+重要极限 $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$ 的值是 \problemblock*
+```
 
 ### 判断题
 
@@ -103,7 +135,7 @@ KiriTeX 自动管理章节、题号和选择题选项编号。正文只写内容
 
 `problemchoice` 用 `\choice{...}` 写选项内容。选择题题干末尾不写句号、问号或任何收尾标点。模板自动生成 A、B、C、D 等字母，并根据最长选项的宽度自动调整为每行四个、两个或一个选项。选择题题后不自动添加横线、括号或留空标记。
 
-1.0 版本只提供 `problem`、`problemtf`、`problemchoice` 三个题目环境，不保留旧环境名。
+1.0 版本只提供 `problem`、`problemtf`、`problemchoice` 三个题目环境；小题用 `problemsubparts`，填空用 `\problemblock`。
 
 ## 版式
 
@@ -118,7 +150,7 @@ A4 竖版适合连续阅读和打印，题目自然流动排版。Pad 横版适�
 ```latex
 \title{高等数学习题集}
 \author{风待桐叶}
-\date{2026 年 6 月}
+\date{2026 年 7 月}
 ```
 
 封面采用左右分区：左侧为 navy 色带与 `\KiriTeX` 标识，右侧显示书名、作者和日期。A4 与 Pad 模式保持同一视觉语言，只根据纸张比例调整位置。
@@ -157,22 +189,19 @@ A4 竖版适合连续阅读和打印，题目自然流动排版。Pad 横版适�
 | 文件 | 用途 |
 | --- | --- |
 | `kiritex.cls` | 类文件入口、选项解析、字体和基础包 |
-| `kiritex-env.sty` | `problem` / `problemtf` / `problemchoice` 题型环境 |
+| `kiritex-env.sty` | `problem` / `problemtf` / `problemchoice` 题型环境，小题和填空命令 |
 | `kiritex-pagestyle.sty` | 页面尺寸、页眉页脚、封面、颜色和 logo |
 | `demo-a4.tex` | A4 竖版示例 |
 | `demo-pad.tex` | Pad 横版示例 |
 | `docs/superpowers/specs/2026-05-18-kiritex-design.md` | 稳定设计规范，供后续 agent 阅读 |
 | `docs/superpowers/plans/2026-05-18-kiritex.md` | 按模块组织的维护计划 |
+| `CHANGELOG.md` | 版本历史 |
 
-## 维护日志
+## 维护
 
-- 2026-07-06：从 KazeTeX 中分离 KiriTeX 文件，建立独立工作区。
-- 2026-07-06：将正文西文字体设为 Latin Modern，并缩小默认字号。
-- 2026-07-06：修正 `\KiriTeX` logo：保留 `KiriTeX` 大小写，并明确 TeX 后缀高度关系为 `T > X > E`。
-- 2026-07-06：写入编号规则：标题、题干和选项内容不得重复手写模板已自动生成的序号。
-- 2026-07-06：重写 README、设计规范和维护计划，使文档按题型、封面、版式、编号规则等模块组织。
-- 2026-07-06：1.0 题型接口定为 `problem` / `problemtf` / `problemchoice`，并统一选择题自适应选项布局。
-- 2026-07-06：规定选择题题干末尾不写句号、问号或任何收尾标点。
+未来 agent 修改类文件或样式文件前，应先阅读设计规范和 `AGENTS.md`。KiriTeX 从 KazeTeX 的历史中保留了稳健 logo、封面公式水印、logo 与标题对齐、Pad 目录跳转等经验，但 1.0 API 以本文档为准，不恢复旧命令名。
+
+版本变化记录在 `CHANGELOG.md`。
 
 ## 依赖
 

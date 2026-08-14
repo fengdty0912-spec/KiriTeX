@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{kiritex}[2026/05/18 KiriTeX problem workbook template]
+\ProvidesClass{kiritex}[2026/07/19 v1.0.1 KiriTeX problem workbook template]
 
 % ---- pad mode toggle ----
 \newif\if@kiritex@pad
@@ -22,6 +22,7 @@
 \RequirePackage{amsmath,amssymb}
 \RequirePackage{hyperref}
 \RequirePackage{graphicx}
+\RequirePackage{xparse}
 
 % ---- Latin font family ----
 \setmainfont{Latin Modern Roman}

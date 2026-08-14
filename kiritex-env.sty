@@ -1,5 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{kiritex-env}[2026/06/23 KiriTeX problem environments]
+\ProvidesPackage{kiritex-env}[2026/07/19 KiriTeX problem environments]
+\RequirePackage{xparse}
 
 % ---- safety fallback for pad conditional ----
 \@ifundefined{if@kiritex@pad}{\newif\if@kiritex@pad\@kiritex@padfalse}{}
@@ -12,9 +13,39 @@
 % Section headings and problem bodies must contain semantic text only. Do not
 % manually write numbers such as "1.", "第 1 节", or "题 1.1" in titles or
 % problem text; KiriTeX owns all visible numbering through counters below.
+% Subparts use (1), (2), ... at the left edge; do not hand-write subpart labels.
+
+% ---- fill-in blank command ----
+% Use \problemblock inside a sentence. Use \problemblock* at sentence end; the
+% starred form appends an un-underlined Chinese full stop after the blank.
+\NewDocumentCommand{\problemblock}{s}{%
+  \underline{\quad\quad\quad\quad\quad\quad}%
+  \IfBooleanT{#1}{。}%
+}
+
+% ---- subparts under one problem ----
+\newcounter{kt@subproblem}
+\newenvironment{problemsubparts}{%
+  \par\smallskip
+  \begin{list}{(\arabic{kt@subproblem})}{%
+    \usecounter{kt@subproblem}%
+    \setlength{\leftmargin}{0pt}%
+    \setlength{\labelwidth}{1.8em}%
+    \setlength{\labelsep}{0.5em}%
+    \setlength{\itemindent}{\dimexpr\labelwidth+\labelsep\relax}%
+    \setlength{\listparindent}{0pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{0pt}%
+    \setlength{\partopsep}{0pt}%
+    \setlength{\itemsep}{0.25\baselineskip}%
+  }%
+}{%
+  \end{list}%
+  \par\smallskip
+}
 
 % ============================================================
-% 1. Standard problem (简答题/计算题)
+% 1. Standard problem
 % ============================================================
 \newenvironment{problem}{%
   \refstepcounter{problem}%
@@ -26,11 +57,10 @@
 }
 
 % ============================================================
-% 2. True/False problem (判断题)
-%    Usage: \begin{problemtf} question text \end{problemtf}
-%    Renders only the generated problem label and the question text.
-%    Choice prompts do not end with punctuation. No trailing parentheses,
-%    blanks, or rules are added.
+% 2. True/False problem
+%    Usage: \begin{problemtf} statement text \end{problemtf}
+%    Renders only the generated problem label and the statement text.
+%    No trailing parentheses, blanks, or rules are added.
 % ============================================================
 \newenvironment{problemtf}{%
   \refstepcounter{problem}%
@@ -42,10 +72,10 @@
 }
 
 % ============================================================
-% 3. Multiple choice problem (选择题)
+% 3. Multiple choice problem
 %    Usage:
 %      \begin{problemchoice}
-%        question text
+%        prompt text with no closing punctuation
 %        \choice{PyCharm}
 %        \choice{Jupyter Notebook}
 %        \choice{Visual Studio Code}
