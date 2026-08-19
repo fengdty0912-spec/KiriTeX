@@ -6,7 +6,7 @@ KiriTeX 是一个基于 XeLaTeX + ctex 的中文题本模板，适合数学、�
 - `\documentclass[pad]{kiritex}`：Pad 横版，默认一页一题，适合平板阅读和批注。
 - `\documentclass[answers]{kiritex}`：教师版，显示 `\answer{...}` 写入的答案。
 
-当前版本：`1.0.3`。
+当前版本：`1.0.4`。
 
 ## 快速开始
 
@@ -188,13 +188,19 @@ A4 竖版适合连续阅读和打印，题目自然流动排版。Pad 横版适�
 | `docs/superpowers/specs/2026-05-18-kiritex-design.md` | 稳定设计规范，供后续 agent 阅读 |
 | `docs/superpowers/specs/2026-08-14-kiritex-math-style.md` | 数学公式写作规范 |
 | `docs/superpowers/plans/2026-05-18-kiritex.md` | 按模块组织的维护计划 |
-| `tools/mineru2kiritex.py` | MinerU 输出转 KiriTeX 的转换脚本 |
-| `docs/mineru-workflow.md` | MinerU → KiriTeX 工作流说明 |
+| `tools/mineru2kiritex.py` | MinerU 输出转 KiriTeX 的转换脚本，带 `--check` 规范自检模式 |
+| `docs/mineru-workflow.md` | MinerU → KiriTeX 工作流说明（含逐题研判与规范自检） |
 | `CHANGELOG.md` | 版本历史 |
 
 ## 维护
 
 未来 agent 修改类文件或样式文件前，应先阅读设计规范和 `AGENTS.md`。KiriTeX 从 KazeTeX 的历史中保留了稳健 logo、封面公式水印、logo 与标题对齐、Pad 目录跳转等经验，但 1.x API 以本文档为准，不恢复旧命令名。
+
+生成或手写 `.tex` 后，先用规范自检复核再交付：
+
+```powershell
+py tools/mineru2kiritex.py --check path/to/真题.tex
+```
 
 版本变化记录在 `CHANGELOG.md`。
 

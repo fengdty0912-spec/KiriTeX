@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.0.4 - 2026-08-19
+
+### 数学规范（核心改动）
+
+- **分式写法重订**：`\dfrac` 全面废弃。行内含分式的公式写 `\displaystyle \frac{...}{...}`（用 `\displaystyle` 显式展开、分式写 `\frac`），行间公式直接 `\frac`。同步修订 math-style spec §3。
+- **数学量必须放进公式环境**（新增 spec §2.8）：区间 `$[a,b]$` / `$(0,2)$`、坐标与点 `$(x_0,y_0)$` / `$P(2,0,-3)$`、函数调用 `$f(x)$`、单字母变量与希腊字母 `$x$` / `$\xi$`，一律不裸写在中文正文。
+- **分段函数规范**（新增 spec §5.1）：`\begin{cases}` 每行写「值, & 条件」，逗号后带空格（`, &`）。
+- 矩阵、向量、变换矩阵统一 `\bm{}`：`\bm{A}`、`\bm{\alpha}`、变换矩阵 `\bm{T}`、单位阵 `\bm{E}`、零矩阵 `\bm{O}`；数域 `\mathbb{K}` / `\mathbb{R}`，向量空间 `\mathbb{V}`（AGENTS.md 与 spec 同步）。
+
+### 工具与工作流
+
+- `mineru2kiritex.py` 新增只读规范自检模式 `py mineru2kiritex.py --check file.tex`：检测 `\dfrac` 残留、行内 `\frac` 缺 `\displaystyle`、cases 逗号后缺空格、`$` / 花括号 / `\[...\]` / `problem` 系列环境平衡、正文裸区间坐标、疑似漏 `\bm` 的矩阵字母，只报告不改写。
+- `docs/mineru-workflow.md` 新增「逐题研判」与「规范自检」两节：OCR 只是草稿，每题需人工判断公式实际写法与文本表述；回忆版题目按描述补全为完整可解题并标注。
+- demo 两个文件按新分式/加粗规则更新并重新编译，README 维护节加入自检入口。
+
+### 经验与教训（来自高数、线代两套真题制作）
+
+- **规范必须直接写进 tex 源码**：用脚本事后补 `\bm`/`\mathbb` 等易出错（正则转义、矩阵行分隔符 `\\` 与 `\bm` 相邻、heredoc 吞反斜杠导致 `\b` 被当退格写入文件），且难以收尾。正确做法是手写时一次到位，再用 `--check` 复核。
+- **行/列分隔符是地雷**：矩阵内 `\\` 后跟加粗项时是三反斜杠 `\\\bm{B}`，任何字符串级替换都可能误伤；后续工具改动应避免对数学内容做无差别文本替换。
+- **交付前必须自检 + 双编译**：检查项至少包括 `--check` 清零、`xelatex` 双编译无错误/警告/缺字、old-version 与 draft 分别在独立目录避免污染。
+
 ## 1.0.3 - 2026-08-14
 
 - Shrunk the body font: A4 uses 小五 (9pt), Pad uses 五号 (10.5pt). Body sizes are now set explicitly via `\zihao` in `\AtBeginDocument`.

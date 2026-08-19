@@ -238,6 +238,90 @@ def convert_markdown(md_text: str, title: str, author: str, date: str) -> str:
     )
 
 
+def lint_tex(path: str) -> int:
+    """Read-only conformance check of a KiriTeX .tex file against the math spec.
+
+    Reports violations without modifying the file. Return code = number of
+    distinct problems found (0 means clean).
+    """
+    with open(path, encoding="utf-8") as fh:
+        s = fh.read()
+    lines = s.splitlines()
+    problems = []
+
+    # 1) \dfrac is retired
+    for m in re.finditer(r"\\dfrac", s):
+        ln = s.count("\n", 0, m.start()) + 1
+        problems.append((ln, "\\dfrac 已废弃，请改用 \\displaystyle \\frac"))
+
+    # 2) inline \frac must be display-style via \displaystyle (matrix/cases cells exempt)
+    for i, line in enumerate(lines, 1):
+        for m in re.finditer(r"\$([^$]*?\\frac[^$]*?)\$", line):
+            body = m.group(1)
+            if "\\displaystyle" in body:
+                continue
+            if re.search(r"\\begin\{(?:pmatrix|bmatrix|vmatrix|matrix|cases)\}", body):
+                continue
+            ctx = body.strip().replace("\n", " ")[:60]
+            problems.append((i, f"行内 \\frac 未加 \\displaystyle：{ctx}"))
+
+    # 3) cases/aligned rows: a comma directly before & (no space) needs a space
+    for i, line in enumerate(lines, 1):
+        if re.search(r",(?=[}]*&)", line):
+            problems.append((i, "分段/方程组行内逗号后缺少空格（应为 `, &`）"))
+
+    # 4) structural balance
+    if s.count("$") % 2 != 0:
+        problems.append((0, "`$` 数量为奇数（存在未闭合的行内公式）"))
+    if s.count("{") != s.count("}"):
+        problems.append((0, f"花括号不平衡：{{ {s.count('{')} ，}} {s.count('}')}"))
+    opens = len(re.findall(r"\\\[", s))
+    closes = len(re.findall(r"\\\]", s))
+    if opens != closes:
+        problems.append((0, f"\\[ ... \\] 不平衡：\\[ {opens} ，\\] {closes}"))
+    for env, name in (("problem", "problem"), ("problemtf", "problemtf"),
+                      ("problemchoice", "problemchoice")):
+        b = len(re.findall(r"\\begin\{" + env + r"\}", s))
+        e = len(re.findall(r"\\end\{" + env + r"\}", s))
+        if b != e:
+            problems.append((0, f"环境 {name}：begin {b} 个，end {e} 个，不平衡"))
+
+    # 5) math quantities MUST be wrapped: flag bare intervals/points in text
+    bare_text = re.sub(r"(\$.*?\$)|(\\\[.*?\\\])", "", s, flags=re.S)
+    for m in re.finditer(r"[（(][0-9a-zA-Z]+\s*,\s*[0-9a-zA-Z][0-9a-zA-Z，,+\-.]*[）)]", bare_text):
+        ln = bare_text.count("\n", 0, m.start()) + 1
+        problems.append((ln, f"区间/坐标未放进公式环境：{m.group(0)}"))
+
+    # 6) heuristics (advisory only): bare uppercase letters that may be matrices
+    hints = []
+    for i, line in enumerate(lines, 1):
+        for m in re.finditer(r"\$([^$]{0,40})\$", line):
+            body = m.group(1)
+            for ch in "ABCEHOPX":
+                for mm in re.finditer("(?<![A-Za-z\\\\{])" + ch + "(?![A-Za-z])", body):
+                    if "\\bm" not in body[: mm.start()]:
+                        hints.append((i, f"可能漏加 \\bm{{}}（若非矩阵请忽略）：{ch} 位于 ${body[:50]}"))
+                        break
+
+    # report
+    seen = set()
+    out = []
+    for ln, msg in problems:
+        tag = (ln, msg)
+        if tag in seen:
+            continue
+        seen.add(tag)
+        out.append(f"{path}:{ln}: {msg}")
+    for line in out:
+        print(line, file=sys.stderr)
+    print(f"{len(out)} problem(s) reported.", file=sys.stderr)
+    for ln, msg in hints:
+        print(f"{path}:{ln}: [提示] {msg}", file=sys.stderr)
+    if hints:
+        print(f"{len(hints)} hint(s) — 启发式提示，请人工核对（数学/物理常量如 C、E 可忽略）。", file=sys.stderr)
+    return len(out)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Convert MinerU Markdown to KiriTeX LaTeX.")
     ap.add_argument("input", help="MinerU .md file or the output directory containing one")
@@ -245,7 +329,12 @@ def main(argv=None):
     ap.add_argument("--title", default="真题", help="document title")
     ap.add_argument("--author", default="风待桐叶", help="document author")
     ap.add_argument("--date", default="2026 年 8 月", help="document date")
+    ap.add_argument("--check", action="store_true",
+                    help="read-only lint mode: check a produced .tex against the math spec")
     args = ap.parse_args(argv)
+
+    if args.check:
+        return lint_tex(args.input)
 
     src = args.input
     if os.path.isdir(src):

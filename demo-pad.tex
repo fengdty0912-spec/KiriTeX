@@ -1,4 +1,4 @@
-\documentclass[pad]{kiritex}
+\documentclass[answers,pad]{kiritex}
 
 \title{高等数学习题集}
 \author{风待桐叶}
@@ -31,7 +31,7 @@
     \item $\displaystyle\lim_{x\to 0}\frac{\tan x-\sin x}{x^3}$
     \item $\displaystyle\lim_{x\to 0}\frac{1-\cos x}{x^2}$
   \end{problemsubparts}
-  \answer{分别为 $\frac12$ 与 $\frac12$。}
+  \answer{分别为 $\displaystyle\frac12$ 与 $\displaystyle\frac12$。}
 \end{problem}
 
 \subsection{重要极限}
@@ -49,10 +49,10 @@
 \begin{problemchoice}
   下列极限中等于 $\mathrm{e}$ 的有
   \choice{$\displaystyle\lim_{x\to 0}(1+x)^{1/x}$}
-  \choice{$\displaystyle\lim_{x\to\infty}\left(1+\dfrac{1}{x}\right)^{x}$}
+  \choice{$\displaystyle\lim_{x\to\infty}\left(1+\frac{1}{x}\right)^{x}$}
   \choice{$\displaystyle\lim_{x\to 0}(1+x)^{x}$}
   \choice{$\displaystyle\lim_{x\to 0}(1+2x)^{1/x}$}
-  \choice{$\displaystyle\lim_{x\to\infty}\left(1+\dfrac{1}{x}\right)^{2x}$}
+  \choice{$\displaystyle\lim_{x\to\infty}\left(1+\frac{1}{x}\right)^{2x}$}
   \choice{$\displaystyle\lim_{x\to 0}(1+x)^{1/x^{2}}$}
   \answer{A、B、D。}
 \end{problemchoice}
@@ -103,8 +103,8 @@
 \end{problem}
 
 \begin{problem}
-  设 $y=\dfrac{1}{1-x}$，求 $y^{(n)}$。
-  \answer{$y^{(n)}=\dfrac{n!}{(1-x)^{n+1}}$。}
+  设 $y=\displaystyle\frac{1}{1-x}$，求 $y^{(n)}$。
+  \answer{$y^{(n)}=\displaystyle\frac{n!}{(1-x)^{n+1}}$。}
 \end{problem}
 
 \subsection{导数的应用}
@@ -160,7 +160,7 @@
 
 \begin{problem}
   计算 $\displaystyle\int \frac{1}{x^2-1}\,\mathrm{d}x$。
-  \answer{$\frac12\ln\left|\frac{x-1}{x+1}\right|+C$。}
+  \answer{$\displaystyle\frac12\ln\left|\frac{x-1}{x+1}\right|+C$。}
 \end{problem}
 
 \begin{problem}
@@ -172,19 +172,19 @@
 
 \begin{problem}
   计算 $\displaystyle\int \sin^2 x\,\mathrm{d}x$。
-  \answer{$\frac{x}{2}-\frac{\sin 2x}{4}+C$。}
+  \answer{$\displaystyle\frac{x}{2}-\frac{\sin 2x}{4}+C$。}
 \end{problem}
 
 \begin{problem}
   计算 $\displaystyle\int \frac{1}{1+\cos x}\,\mathrm{d}x$。
-  \answer{$\tan\frac{x}{2}+C$。}
+  \answer{$\displaystyle\tan\frac{x}{2}+C$。}
 \end{problem}
 
 \subsection{换元法}
 
 \begin{problem}
   计算 $\displaystyle\int \frac{\ln x}{x}\,\mathrm{d}x$。
-  \answer{$\frac12(\ln x)^2+C$。}
+  \answer{$\displaystyle\frac12(\ln x)^2+C$。}
 \end{problem}
 
 \begin{problem}
@@ -197,8 +197,8 @@
 \subsection{偏导数与梯度}
 
 \begin{problem}
-  设 $z=f(x,y)=\mathrm{e}^{x}\sin y$，求 $\dfrac{\partial z}{\partial x}$、$\dfrac{\partial z}{\partial y}$ 与梯度 $\nabla f$。
-  \answer{$\dfrac{\partial z}{\partial x}=\mathrm{e}^{x}\sin y$，$\dfrac{\partial z}{\partial y}=\mathrm{e}^{x}\cos y$，$\nabla f=\left(\mathrm{e}^{x}\sin y,\ \mathrm{e}^{x}\cos y\right)$。}
+  设 $z=f(x,y)=\mathrm{e}^{x}\sin y$，求 $\displaystyle\frac{\partial z}{\partial x}$、$\displaystyle\frac{\partial z}{\partial y}$ 与梯度 $\nabla f$。
+  \answer{$\displaystyle\frac{\partial z}{\partial x}=\mathrm{e}^{x}\sin y$，$\displaystyle\frac{\partial z}{\partial y}=\mathrm{e}^{x}\cos y$，$\nabla f=\left(\mathrm{e}^{x}\sin y,\ \mathrm{e}^{x}\cos y\right)$。}
 \end{problem}
 
 \begin{problem}
@@ -206,7 +206,7 @@
   \[
   \nabla r=\frac{\bm{r}}{r}\quad(r\neq 0).
   \]
-  \answer{由 $\dfrac{\partial r}{\partial x}=\dfrac{x}{r}$（$y,z$ 同理）得 $\nabla r=\left(\dfrac{x}{r},\dfrac{y}{r},\dfrac{z}{r}\right)=\dfrac{\bm{r}}{r}$。}
+  \answer{由 $\displaystyle\frac{\partial r}{\partial x}=\frac{x}{r}$（$y,z$ 同理）得 $\nabla r=\left(\frac{x}{r},\frac{y}{r},\frac{z}{r}\right)=\frac{\bm{r}}{r}$。}
 \end{problem}
 
 \subsection{矩阵与行列式}

@@ -75,6 +75,28 @@ xelatex -interaction=nonstopmode 真题_高等数学.tex
 
 编译需要 KiriTeX 的 `kiritex.cls`、`kiritex-env.sty`、`kiritex-pagestyle.sty` 与 `.tex` 同目录。
 
+## 5. 逐题研判（重要）
+
+OCR 只是草稿，**不管生成的 md 是什么样，每一题都要人工判断公式的实际写法与文本的正式表述**：
+
+- 矩阵、向量、变换矩阵一律 `\bm{...}`（`\bm{A}`、`\bm{\alpha}`、变换矩阵 `\bm{T}`、单位阵 `\bm{E}`、零矩阵 `\bm{O}`）；行列式写 `|\bm{A}|`，转置写 `\bm{A}^{\mathrm{T}}`。
+- 数域用 `\mathbb{K}`、`\mathbb{R}`；向量空间用 `\mathbb{V}`。
+- 行内分式写 `\displaystyle \frac{...}{...}`，不使用 `\dfrac`。
+- 区间、坐标、函数调用、希腊字母一律放进 `$...$`，不裸写在正文。
+- 判断题用 `problemtf`，单选题用 `problemchoice`（选项只写内容，不加 A/B/C/D），填空用 `\problemblock`，选择题题干末尾不带句号。
+- **回忆版**题目只有描述没有数据：按描述补出一题完整、可解的标准题型即可，并在题干附近注明「回忆版，按题意补全」。
+- 做完后用规范自检脚本复核（见下）。
+
+## 6. 规范自检
+
+`mineru2kiritex.py` 提供只读自检模式，对照数学规范扫描已生成的 `.tex`，不改动文件：
+
+```powershell
+py tools/mineru2kiritex.py --check 真题_高等数学.tex
+```
+
+检查项：`\dfrac` 残留、行内 `\frac` 缺 `\displaystyle`、cases 行逗号后缺空格、`$` / 花括号 / `\[...\]` / `problem` 系列环境是否平衡、正文里裸写的区间与坐标、疑似漏加 `\bm` 的矩阵字母。输出为 `文件:行号: 问题描述`，返回 0 表示干净。
+
 ## 已知限制
 
 - MinerU 的 OCR 公式是「脏」的：`\lim` 常被认成 `\operatorname* { l i m }`，复杂公式可能有漏括号、漏 `\to` 等错误。转换器能自动修掉系统性错误，但**个别 OCR 错仍需人工校正**。

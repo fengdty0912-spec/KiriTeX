@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{kiritex}[2026/08/14 v1.0.3 KiriTeX problem workbook template]
+\ProvidesClass{kiritex}[2026/08/19 v1.0.4 KiriTeX problem workbook template]
 
 % ---- class option toggles ----
 \newif\if@kiritex@pad
@@ -46,7 +46,7 @@
 % ---- additional settings ----
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.5\baselineskip}
-\newcommand{\kiritexversion}{1.0.3}
+\newcommand{\kiritexversion}{1.0.4}
 
 \AtBeginDocument{%
   \if@kiritex@pad
