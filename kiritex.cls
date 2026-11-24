@@ -6,6 +6,8 @@
 \@kiritex@padfalse
 \newif\if@kiritex@answers
 \@kiritex@answersfalse
+\newif\if@kiritex@answersection
+\DeclareOption{answersection}{\@kiritex@answersectiontrue}
 \DeclareOption{pad}{\@kiritex@padtrue}
 \DeclareOption{answers}{\@kiritex@answerstrue}
 
