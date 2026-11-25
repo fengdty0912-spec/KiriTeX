@@ -156,6 +156,14 @@ KiriTeX 自动管理章节编号、题号和选择题选项编号。正文只写
 
 答案内容跟随题目书写，不建立额外编号，也不改变题号计数。
 
+使用 `answersection` 可将答案统一排在文末，并在题目与解答之间双向跳转：
+
+```latex
+\documentclass[pad,answersection]{kiritex}
+```
+
+仍在题目环境里写 `\answer{...}`。有答案的题目会显示「查看答案」，解答沿用题号并提供「返回原题」。答案按题目顺序排版，答案区也会加入目录。此选项支持 A4 和 Pad，同时指定 `answers` 时优先使用文末答案区。没有写答案的题目不显示跳转按钮。使用链接时请选支持 PDF 内部跳转的阅读器。
+
 ## 版式
 
 A4 竖版适合连续阅读和打印，题目自然流动排版。Pad 横版适合平板阅读，每道题结束后自动换页。
@@ -184,7 +192,7 @@ A4 竖版适合连续阅读和打印，题目自然流动排版。Pad 横版适�
 | `kiritex-env.sty` | `problem` / `problemtf` / `problemchoice` 题型环境，小题、填空和答案命令 |
 | `kiritex-pagestyle.sty` | 页面尺寸、页眉页脚、封面、颜色和 logo |
 | `demo-a4.tex` | A4 竖版教师版示例 |
-| `demo-pad.tex` | Pad 横版学生版示例 |
+| `demo-pad.tex` | Pad 横版双向答案跳转示例 |
 | `docs/superpowers/specs/2026-05-18-kiritex-design.md` | 稳定设计规范，供后续 agent 阅读 |
 | `docs/superpowers/specs/2026-08-14-kiritex-math-style.md` | 数学公式写作规范 |
 | `docs/superpowers/plans/2026-05-18-kiritex.md` | 按模块组织的维护计划 |

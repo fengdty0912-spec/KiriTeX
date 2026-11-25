@@ -20,6 +20,7 @@
 \NewDocumentCommand{\kt@problem@head}{}{%
   \refstepcounter{problem}%
   \par\medskip\noindent
+  \if@kiritex@answersection\kt@answerstart\fi
   \textbf{题 \theproblem}%
   \quad
 }
@@ -35,12 +36,102 @@
 % ---- optional answer output ----
 % Hidden by default. Use \documentclass[answers]{kiritex} to print answers.
 \NewDocumentCommand{\answer}{m}{%
-  \if@kiritex@answers
-    \par\smallskip
-    \noindent{\textcolor{kiriteal}{\bfseries 参考答案}}\quad #1%
-    \par\smallskip
+  \if@kiritex@answersection
+    \kt@answercollect{#1}%
+  \else
+    \if@kiritex@answers
+      \par\smallskip
+      \noindent{\textcolor{kiriteal}{\bfseries 参考答案}}\quad #1%
+      \par\smallskip
+    \fi
   \fi
 }
+
+
+% ---- linked answer appendix (opt-in) ----
+\ExplSyntaxOn
+\seq_new:N \g__kiritex_answers_seq
+\int_new:N \g__kiritex_problem_anchor_int
+\int_new:N \g__kiritex_answer_anchor_int
+\tl_new:N \l__kiritex_problem_anchor_tl
+\prop_new:N \g__kiritex_answer_links_prop
+\tl_new:N \l__kiritex_answer_links_tl
+\cs_generate_variant:Nn \prop_get:NnNTF { NV }
+\cs_generate_variant:Nn \prop_get:NnNT { NV }
+\cs_generate_variant:Nn \prop_gput:Nnn { NVV }
+\cs_generate_variant:Nn \prop_gremove:Nn { NV }
+
+\cs_new_protected:Npn \kt@answerstart
+  {
+    \int_gincr:N \g__kiritex_problem_anchor_int
+    \tl_set:Nx \l__kiritex_problem_anchor_tl
+      {. \int_use:N \g__kiritex_problem_anchor_int }
+    \hypertarget{kiri:problem\l__kiritex_problem_anchor_tl}{}
+  }
+
+\cs_new_protected:Npn \kt@answercollect #1
+  {
+    \tl_if_empty:NTF \l__kiritex_problem_anchor_tl
+      { \PackageError{kiritex-env}{Answer~outside~a~problem}{Put~the~answer~inside~a~KiriTeX~problem~environment.} }
+      {
+        \int_gincr:N \g__kiritex_answer_anchor_int
+        \prop_get:NVNTF \g__kiritex_answer_links_prop
+          \l__kiritex_problem_anchor_tl \l__kiritex_answer_links_tl
+          { }
+          { \tl_clear:N \l__kiritex_answer_links_tl }
+        \tl_put_right:Nx \l__kiritex_answer_links_tl
+          {
+            \exp_not:N \__kiritex_answer_button:nn
+              {kiri:answer.\int_use:N \g__kiritex_answer_anchor_int}{查看答案}
+            \exp_not:N \quad
+          }
+        \prop_gput:NVV \g__kiritex_answer_links_prop
+          \l__kiritex_problem_anchor_tl \l__kiritex_answer_links_tl
+        % Freeze the label and destinations while preserving the answer tokens.
+        \seq_gput_right:Nx \g__kiritex_answers_seq
+          {
+            \exp_not:N \__kiritex_print_answer:nnnn
+              {\theproblem}
+              {kiri:problem\l__kiritex_problem_anchor_tl}
+              {kiri:answer.\int_use:N \g__kiritex_answer_anchor_int}
+              {\exp_not:n {#1}}
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__kiritex_answer_button:nn #1#2
+  { \hyperlink{#1}{\colorbox{kirinavylight}{\strut\enspace #2\enspace}} }
+
+\cs_new_protected:Npn \kt@answerfinish
+  {
+    \prop_get:NVNT \g__kiritex_answer_links_prop
+      \l__kiritex_problem_anchor_tl \l__kiritex_answer_links_tl
+      {
+        \par\smallskip\noindent\tl_use:N \l__kiritex_answer_links_tl
+        \prop_gremove:NV \g__kiritex_answer_links_prop \l__kiritex_problem_anchor_tl
+      }
+  }
+
+\cs_new_protected:Npn \__kiritex_print_answer:nnnn #1#2#3#4
+  {
+    \par\medskip\noindent\hypertarget{#3}{}
+    \textbf{题~#1}\quad\__kiritex_answer_button:nn {#2}{返回原题}
+    \par\smallskip #4\par
+    \if@kiritex@pad\clearpage\fi
+  }
+
+\AtEndDocument
+  {
+    \seq_if_empty:NF \g__kiritex_answers_seq
+      {
+        \clearpage
+        \section*{参考答案}
+        \markboth{参考答案}{参考答案}
+        \addcontentsline{toc}{section}{参考答案}
+        \seq_map_inline:Nn \g__kiritex_answers_seq {#1}
+      }
+  }
+\ExplSyntaxOff
 
 % ---- subparts under one problem ----
 \newcounter{kt@subproblem}
@@ -69,6 +160,7 @@
 \NewDocumentEnvironment{problem}{}{%
   \kt@problem@head
 }{%
+  \if@kiritex@answersection\kt@answerfinish\fi
   \par\medskip
   \if@kiritex@pad\clearpage\fi
 }
@@ -81,6 +173,7 @@
 \NewDocumentEnvironment{problemtf}{}{%
   \kt@problem@head
 }{%
+  \if@kiritex@answersection\kt@answerfinish\fi
   \par\medskip
   \if@kiritex@pad\clearpage\fi
 }
@@ -141,6 +234,7 @@
   }%
 }{%
   \kt@render@choices
+  \if@kiritex@answersection\kt@answerfinish\fi
   \par\medskip
   \if@kiritex@pad\clearpage\fi
 }
